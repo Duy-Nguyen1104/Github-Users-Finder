@@ -16,10 +16,7 @@ pipeline {
                 script {
                     // Login to Docker Hub before building the image
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        bat """
-                        docker login -u "${DOCKER_USERNAME}" -p %DOCKER_PASS%
-
-                        """
+                        bat "docker login -u "${DOCKER_USERNAME}" -p %DOCKER_PASS%"
                     
                         // Build and push Docker image
                         bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
