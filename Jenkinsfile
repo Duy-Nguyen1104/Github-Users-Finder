@@ -11,7 +11,7 @@ pipeline {
         // OCTOPUS_PROJECT_NAME = 'YourProjectName'  // Replace with your Octopus project name
         // OCTOPUS_ENVIRONMENT_NAME = 'Production'  // Replace with your target environment name
         DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff	'  // Docker credentials ID stored in Jenkins
-        DOCKER_REGISTRY = 'nguyenduy2004'  // e.g., 'docker.io' for Docker Hub
+        DOCKER_REGISTRY = 'nguyenduy2004'  
     }
 
     stages {
@@ -104,7 +104,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat 'docker-compose down'  // Stop and remove containers
+            bat 'docker-compose down'  
         }
     }
 }
