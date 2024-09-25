@@ -15,14 +15,14 @@ pipeline {
             steps {
                 script {
                     // Login to Docker Hub before building the image
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'nguyenduy2004', passwordVariable: 'DOCKER_PASS')]) {
-                        bat "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REGISTRY}"
-
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat """
+                        echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_REGISTRY}
+                        """
+                    
                         // Build and push Docker image
-                        bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
-                        bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest"
-
-
+                        bat "docker build -t docker.io/${DOCKER_USER}/${IMAGE_NAME}:latest ."
+                        bat "docker push docker.io/${DOCKER_USER}/${IMAGE_NAME}:latest"
                     }
 
                     // Build the application
