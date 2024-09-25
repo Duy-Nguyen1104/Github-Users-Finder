@@ -26,7 +26,7 @@ pipeline {
 
                     // Build and push the Docker image to the registry
                     bat "docker build -t ${IMAGE_NAME}:latest ."
-                    bat "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest"
+                    bat "docker push ${IMAGE_NAME}:latest"
                 }
             }
         }
