@@ -17,7 +17,8 @@ pipeline {
                     // Login to Docker Hub before building the image
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         bat """
-                        docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_PASS}
+                        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
                         """
                     
                         // Build and push Docker image
