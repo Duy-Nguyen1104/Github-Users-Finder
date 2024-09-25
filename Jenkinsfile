@@ -51,6 +51,8 @@ pipeline {
                     -Dsonar.host.url=http://localhost:9000 ^
                     -Dsonar.login=sqp_a325388119043de1e60e63109463bb7d58c24b7d
                     """
+                    echo "SonarQube analysis completed successfully."
+        }
                 }
             }
         }
