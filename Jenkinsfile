@@ -18,9 +18,6 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                         bat "docker login -u nguyenduy2004 -p %dockerhubpwd%"
                     
-                        // Build and push Docker image
-                        bat "docker build -t ${DOCKER_REGISTRY}/nguyenduy2004/${IMAGE_NAME}:latest ."
-                        bat "docker push ${DOCKER_REGISTRY}/nguyenduy2004/${IMAGE_NAME}:latest"
                     }
 
                     // Build the application
@@ -28,8 +25,8 @@ pipeline {
                     bat 'npm run build'
 
                     // Build and push the Docker image to the registry
-                    bat "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest ."
-                    bat "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest"
+                    bat "docker build -t ${DOCKER_REGISTRY}/nguyenduy2004/${IMAGE_NAME}:latest ."
+                    bat "docker push ${DOCKER_REGISTRY}/nguyenduy2004/${IMAGE_NAME}:latest"
                 }
             }
         }
