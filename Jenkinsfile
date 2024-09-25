@@ -22,8 +22,7 @@ pipeline {
                         bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
                         bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest"
 
-                        // Logout from Docker after pushing the image
-                        bat "docker logout ${DOCKER_REGISTRY}"
+
                     }
 
                     // Build the application
@@ -69,7 +68,8 @@ pipeline {
                     bat 'docker-compose up -d'
 
                     // Logout from Docker after deployment
-                    bat "docker logout"
+                                            // Logout from Docker after pushing the image
+                    bat "docker logout ${DOCKER_REGISTRY}"
                 }
             }
         }
