@@ -14,13 +14,6 @@ pipeline {
         DOCKER_REGISTRY = 'nguyenduy2004'  
     }
 
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git REPO_URL
-            }
-        }
-
         stage('Build') {
             steps {
                 script {
