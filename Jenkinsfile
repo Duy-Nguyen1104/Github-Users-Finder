@@ -10,10 +10,11 @@ pipeline {
         // OCTOPUS_API_KEY = 'your-octopus-api-key'  // Replace with your Octopus Deploy API key
         // OCTOPUS_PROJECT_NAME = 'YourProjectName'  // Replace with your Octopus project name
         // OCTOPUS_ENVIRONMENT_NAME = 'Production'  // Replace with your target environment name
-        DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff	'  // Docker credentials ID stored in Jenkins
-        DOCKER_REGISTRY = 'nguyenduy2004'  
+        DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff'  // Docker credentials ID stored in Jenkins
+        DOCKER_REGISTRY = 'nguyenduy2004'
     }
 
+    stages {
         stage('Build') {
             steps {
                 script {
@@ -29,7 +30,6 @@ pipeline {
                     // Build and push the Docker image to the registry
                     bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
                     bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest"
-
                 }
             }
         }
@@ -44,20 +44,19 @@ pipeline {
         }
 
         stage('Code Quality Analysis') {
-    steps {
-        script {
-            // Run SonarQube analysis using 'bat' command for Windows
-            bat """
-            sonar-scanner.bat ^
-            -Dsonar.projectKey=SIT223HD ^
-            -Dsonar.sources=. ^
-            -Dsonar.host.url=http://localhost:9000 ^
-            -Dsonar.login=sqp_a325388119043de1e60e63109463bb7d58c24b7d
-            """
+            steps {
+                script {
+                    // Run SonarQube analysis using 'bat' command for Windows
+                    bat """
+                    sonar-scanner.bat ^
+                    -Dsonar.projectKey=SIT223HD ^
+                    -Dsonar.sources=. ^
+                    -Dsonar.host.url=http://localhost:9000 ^
+                    -Dsonar.login=sqp_a325388119043de1e60e63109463bb7d58c24b7d
+                    """
+                }
+            }
         }
-    }
-}
-
 
         stage('Deploy to Test Environment') {
             steps {
@@ -97,7 +96,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat 'docker-compose down'  
+            bat 'docker-compose down'
         }
     }
 }
