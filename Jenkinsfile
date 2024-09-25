@@ -7,7 +7,7 @@ pipeline {
         TEST_ENV = 'test'
         PROD_ENV = 'production'
         DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff'  // Docker credentials ID stored in Jenkins
-        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REGISTRY = 'nguyenduy2004'
     }
 
     stages {
@@ -21,8 +21,8 @@ pipeline {
                         """
                     
                         // Build and push Docker image
-                        bat "docker build -t docker.io/${DOCKER_USER}/${IMAGE_NAME}:latest ."
-                        bat "docker push docker.io/${DOCKER_USER}/${IMAGE_NAME}:latest"
+                        bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
+                        bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest"
                     }
 
                     // Build the application
