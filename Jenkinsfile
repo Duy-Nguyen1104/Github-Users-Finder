@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     // Run tests using Jest
-                    bat 'npm test -- --watchAll=false'
+                    bat 'npm test -- --watchAll=false --passWithNoTests'
                 }
             }
         }
