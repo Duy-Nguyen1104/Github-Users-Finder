@@ -6,10 +6,6 @@ pipeline {
         IMAGE_NAME = 'github-finder'
         TEST_ENV = 'test'
         PROD_ENV = 'production'
-        // OCTOPUS_SERVER = 'http://your-octopus-server'  // Replace with your Octopus Deploy server URL
-        // OCTOPUS_API_KEY = 'your-octopus-api-key'  // Replace with your Octopus Deploy API key
-        // OCTOPUS_PROJECT_NAME = 'YourProjectName'  // Replace with your Octopus project name
-        // OCTOPUS_ENVIRONMENT_NAME = 'Production'  // Replace with your target environment name
         DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff'  // Docker credentials ID stored in Jenkins
         DOCKER_REGISTRY = 'nguyenduy2004'
     }
@@ -18,10 +14,10 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Login to Docker before building the image (if necessary for private registry)
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    // Login to Docker Hub before building the image
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASS')]) {
                         bat """
-                        echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_REGISTRY}
+                        echo ${DOCKER_PASS} | docker login -u nguyenduy2004 --password-stdin
                         """
                     }
 
@@ -30,8 +26,8 @@ pipeline {
                     bat 'npm run build'
 
                     // Build and push the Docker image to the registry
-                    bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
-                    bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest"
+                    bat "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest ."
+                    bat "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest"
                 }
             }
         }
@@ -68,31 +64,10 @@ pipeline {
                     bat 'docker-compose up -d'
 
                     // Logout from Docker after deployment
-                    bat "docker logout ${DOCKER_REGISTRY}"
+                    bat "docker logout"
                 }
             }
         }
-
-        // stage('Release') {
-        //     steps {
-        //         script {
-        //             // Promote the application to production using Octopus Deploy
-        //             bat """
-        //             octo push --package=${IMAGE_NAME} --replace-existing --server=${OCTOPUS_SERVER} --apiKey=${OCTOPUS_API_KEY}
-        //             octo deploy-release --project=${OCTOPUS_PROJECT_NAME} --version=1.0.0 --deployTo=${OCTOPUS_ENVIRONMENT_NAME} --server=${OCTOPUS_SERVER} --apiKey=${OCTOPUS_API_KEY}
-        //             """
-        //         }
-        //     }
-        // }
-
-        // stage('Monitoring and Alerting') {
-        //     steps {
-        //         script {
-        //             // Example of setting up monitoring
-        //             bat 'echo "Monitoring set up with Datadog/New Relic"'
-        //         }
-        //     }
-        // }
     }
 
     post {
