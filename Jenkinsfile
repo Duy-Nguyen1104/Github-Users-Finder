@@ -16,7 +16,7 @@ pipeline {
                 script {
                     // Login to Docker Hub before building the image
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-                        bat "docker login -u nguyenduy2004 -p %dockerhubpwd%"
+                        bat "docker login -u nguyenduy2004 -p %dockerhubpwd% docker.io"
                     
                     }
 
@@ -25,8 +25,8 @@ pipeline {
                     bat 'npm run build'
 
                     // Build and push the Docker image to the registry
-                    bat "docker build -t ${IMAGE_NAME}:latest ."
-                    bat "docker push ${IMAGE_NAME}:latest"
+                    bat "docker build -t nguyenduy2004/${IMAGE_NAME}:latest ."
+                    bat "docker push nguyenduy2004/${IMAGE_NAME}:latest"
                 }
             }
         }
