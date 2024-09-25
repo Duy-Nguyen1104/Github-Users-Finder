@@ -8,7 +8,6 @@ pipeline {
         PROD_ENV = 'production'
         DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff'  // Docker credentials ID stored in Jenkins
         DOCKER_REGISTRY = 'nguyenduy2004'
-        DOCKER_USER = 'nguyenduy2004'  // Replace with your Docker Hub username
     }
 
     stages {
@@ -18,9 +17,10 @@ pipeline {
                     // Login to Docker Hub before building the image
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         bat """
-                        echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
-                        """
+                        docker login -u "${DOCKER_USERNAME}" -p %DOCKER_PASS%
 
+                        """
+                    
                         // Build and push Docker image
                         bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
                         bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest"
@@ -29,6 +29,10 @@ pipeline {
                     // Build the application
                     bat 'npm install'
                     bat 'npm run build'
+
+                    // Build and push the Docker image to the registry
+                    bat "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest ."
+                    bat "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest"
                 }
             }
         }
@@ -65,7 +69,8 @@ pipeline {
                     bat 'docker-compose up -d'
 
                     // Logout from Docker after deployment
-                    bat "docker logout"
+                                            // Logout from Docker after pushing the image
+                    bat "docker logout ${DOCKER_REGISTRY}"
                 }
             }
         }
