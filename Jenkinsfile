@@ -6,7 +6,7 @@ pipeline {
         IMAGE_NAME = 'github-finder'
         TEST_ENV = 'test'
         PROD_ENV = 'production'
-        DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff'  // Docker credentials ID stored in Jenkins
+        DOCKER_CREDENTIALS_ID = 'dockerhub-pwd'  // Docker credentials ID stored in Jenkins
         DOCKER_REGISTRY = 'nguyenduy2004'
     }
 
@@ -15,12 +15,12 @@ pipeline {
             steps {
                 script {
                     // Login to Docker Hub before building the image
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        bat "docker login -u ${DOCKER_USERNAME} -p %DOCKER_PASS%"
+                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                        bat "docker login -u nguyenduy2004 -p %dockerhubpwd%"
                     
                         // Build and push Docker image
-                        bat "docker build -t ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest ."
-                        bat "docker push ${DOCKER_REGISTRY}/${DOCKER_USER}/${IMAGE_NAME}:latest"
+                        bat "docker build -t ${DOCKER_REGISTRY}/nguyenduy2004/${IMAGE_NAME}:latest ."
+                        bat "docker push ${DOCKER_REGISTRY}/nguyenduy2004/${IMAGE_NAME}:latest"
                     }
 
                     // Build the application
