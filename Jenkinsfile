@@ -51,13 +51,20 @@ pipeline {
         }
 
         stage('Code Quality Analysis') {
-            steps {
-                script {
-                    // Run SonarQube analysis
-                    sonar-scanner.bat -D"sonar.projectKey=SIT223HD" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.token=sqp_a325388119043de1e60e63109463bb7d58c24b7d"
-                }
-            }
+    steps {
+        script {
+            // Run SonarQube analysis using 'bat' command for Windows
+            bat """
+            sonar-scanner.bat ^
+            -Dsonar.projectKey=SIT223HD ^
+            -Dsonar.sources=. ^
+            -Dsonar.host.url=http://localhost:9000 ^
+            -Dsonar.login=sqp_a325388119043de1e60e63109463bb7d58c24b7d
+            """
         }
+    }
+}
+
 
         stage('Deploy to Test Environment') {
             steps {
