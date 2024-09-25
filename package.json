@@ -19,8 +19,13 @@
     "eject": "react-scripts eject"
   },
   "jest": {
-    "collectCoverage": true,
-    "testEnvironment": "jsdom"
+    "clearMocks": true,
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/*.test.{js,jsx,ts,tsx}"
+    ]
   },
   "eslintConfig": {
     "extends": [
