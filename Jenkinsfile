@@ -7,7 +7,7 @@ pipeline {
         TEST_ENV = 'test'
         PROD_ENV = 'production'
         DOCKER_CREDENTIALS_ID = 'd933c439-0b13-405f-9309-13a519912eff'  // Docker credentials ID stored in Jenkins
-        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REGISTRY = 'nguyenduy2004'
         DOCKER_USER = 'nguyenduy2004'  // Replace with your Docker Hub username
     }
 
