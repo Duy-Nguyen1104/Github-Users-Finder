@@ -6,7 +6,7 @@ pipeline {
         IMAGE_NAME = 'github-finder'
         TEST_ENV = 'test'
         PROD_ENV = 'production'
-        DOCKER_CREDENTIALS_ID = 'dockerhub-pwd'  // Docker credentials ID stored in Jenkins
+        DOCKER_CREDENTIALS_ID = 'dockerhub-pwd'  
         DOCKER_REGISTRY = 'nguyenduy2004'
     }
 
@@ -17,7 +17,6 @@ pipeline {
                     // Login to Docker Hub before building the image
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                         bat "docker login -u nguyenduy2004 -p %dockerhubpwd% docker.io"
-                    
                     }
 
                     // Build the application
@@ -40,19 +39,19 @@ pipeline {
             }
         }
 
-        stage('Code Quality Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Run SonarQube analysis using 'bat' command for Windows
-                    bat """
-                    sonar-scanner.bat ^
-                    -Dsonar.projectKey=SIT223HD ^
-                    -Dsonar.sources=. ^
-                    -Dsonar.host.url=http://localhost:9000 ^
-                    -Dsonar.login=sqp_a325388119043de1e60e63109463bb7d58c24b7d
-                    """
-                    echo "SonarQube analysis completed successfully."
-        }
+                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=SIT223HD \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=sqp_2bc86fdc497a43a732a1fc05892469fd1b85922c
+                        """
+                    }
                 }
             }
         }
@@ -65,7 +64,6 @@ pipeline {
                     bat 'docker-compose up -d'
 
                     // Logout from Docker after deployment
-                                            // Logout from Docker after pushing the image
                     bat "docker logout ${DOCKER_REGISTRY}"
                 }
             }
