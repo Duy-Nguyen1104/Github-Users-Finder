@@ -50,7 +50,7 @@ pipeline {
                         -Dsonar.projectKey=SIT223HD \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=sqp_3c208d7c8460e520c9037f60a934c99293889d95
+                        -Dsonar.token=sqp_3c208d7c8460e520c9037f60a934c99293889d95
                         """
                     }
                 }
