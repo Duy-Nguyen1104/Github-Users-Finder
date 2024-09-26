@@ -21,7 +21,7 @@ pipeline {
 
                     // Build the application
                     bat 'npm install'
-                    bat 'npm run build'
+                    bat 'npm run build' 
 
                     // Build and push the Docker image to the registry
                     bat "docker build -t nguyenduy2004/${IMAGE_NAME}:latest ."
@@ -68,7 +68,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                         bat "docker login -u nguyenduy2004 -p %dockerhubpwd% docker.io"
                     }
-                    
+
                     // Pull and deploy the Docker image using Docker Compose
                     bat 'docker-compose pull'
                     bat 'docker-compose up -d'
@@ -83,7 +83,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat 'docker-compose down'
+            bat 'docker image prune -f'
         }
     }
 }
