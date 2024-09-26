@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // Run tests using Jest
-                    bat 'npm test -- --watchAll=false --passWithNoTests'
+                    bat 'npm test -- --watchAll=false --verbose'
                 }
             }
         }
@@ -42,6 +42,11 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
+                    // Specify Maven installation
+                    def mavenHome = tool name: 'Maven', type: 'hudson.tasks.Maven$MavenInstallation'
+                    // Run Maven build
+                    sh "${mavenHome}/bin/mvn clean install"
+                    
                     def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
                     withSonarQubeEnv('SonarQube') {
                         sh """
