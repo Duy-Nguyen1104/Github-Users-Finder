@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Footer from "./Footer";
+import Footer from "./components/layout/Footer";
 
 test("renders footer with correct year and text", () => {
   render(<Footer />);
