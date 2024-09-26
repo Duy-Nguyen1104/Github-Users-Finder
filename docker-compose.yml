@@ -1,6 +1,6 @@
 services:
   app:
-    image: github-finder
+    image: nguyenduy2004/github-finder:latest
     build:
       context: .
       dockerfile: Dockerfile
