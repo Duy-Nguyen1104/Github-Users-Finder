@@ -26,6 +26,9 @@ pipeline {
                     // Build and push the Docker image to the registry
                     bat "docker build -t nguyenduy2004/${IMAGE_NAME}:latest ."
                     bat "docker push nguyenduy2004/${IMAGE_NAME}:latest"
+
+                    // Logout from Docker after pushing the image
+                    bat "docker logout ${DOCKER_REGISTRY}"
                 }
             }
         }
@@ -51,6 +54,7 @@ pipeline {
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.token=sqp_3c208d7c8460e520c9037f60a934c99293889d95
+                        -Dsonar.exclusions=**/*.test.*,**/node_modules/**,**/vendor/**
                         """
                     }
                 }
@@ -60,6 +64,11 @@ pipeline {
         stage('Deploy to Test Environment') {
             steps {
                 script {
+                    // Login to Docker Hub before deployment
+                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                        bat "docker login -u nguyenduy2004 -p %dockerhubpwd% docker.io"
+                    }
+                    
                     // Pull and deploy the Docker image using Docker Compose
                     bat 'docker-compose pull'
                     bat 'docker-compose up -d'
