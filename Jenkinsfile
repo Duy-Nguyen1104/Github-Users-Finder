@@ -45,7 +45,7 @@ pipeline {
 
                     def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
                     withSonarQubeEnv('SonarQube') {
-                        sh """
+                        bat """
                         ${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=SIT223HD \
                         -Dsonar.sources=. \
