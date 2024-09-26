@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect"; // Import jest-dom
-import Footer from "./Footer";
+import "@testing-library/jest-dom"; // Import jest-dom
+import Footer from "./components/layout/Footer";
 
 describe("Footer", () => {
   test("renders footer with correct year and text", () => {
